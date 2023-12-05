@@ -1,0 +1,20 @@
+{
+    "0": {
+        "name" : "Fluffy",
+        "picture" : "assets/cat.jpg",
+        "isFriendly" : false,
+        "species" : "Cat"
+    },
+    "1": {
+        "name" : "Rex",
+        "picture" : "assets/dog.webp",
+        "isFriendly" : true,
+        "species" : "Dog"
+    },
+    "2": {
+        "name" : "Screamin Jean",
+        "picture" : "assets/bird.webp",
+        "isFriendly" : false,
+        "species" : "Bird"
+    }
+}
