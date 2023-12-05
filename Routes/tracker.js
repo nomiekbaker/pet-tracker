@@ -1,7 +1,6 @@
 const express = require("express");
 const trackerRoutes = express.Router();
 const fs = require('fs');
-const indexRouter = require("./index");
 const dataPath = './Details/pet-data.json' ;
 
 // util functions 
@@ -15,11 +14,6 @@ const getTrackerData = () => {
     const jsonData = fs.readFileSync(dataPath)
     return JSON.parse(jsonData)    
 }
-
-// Home page route.
-trackerRoutes.get("/", function (req, res) {
-  res.render("Home Page")
-});
 
 // Create new pet
   trackerRoutes.post('/tracker/add', (req, res) => {

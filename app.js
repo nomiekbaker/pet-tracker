@@ -11,10 +11,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const routes = require('./Routes/Route')
 app.use('/', routes)
 
-app.set('view engine', 'pug');
-app.set('views','./views');
-
 //start server
 app.listen(3000, ()=>{
     console.log("listeniing at port:3000")
 }) 
+
+app.set('view engine', 'pug');
+app.set('views','./views');
+
+app.get('/', function(req, res){
+    res.render('view');
+ });
