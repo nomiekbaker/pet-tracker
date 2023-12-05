@@ -1,8 +1,8 @@
-const express = require("express")
+const express = require("express");
 const trackerRoutes = express.Router();
 const fs = require('fs');
-
-const dataPath = './Details/pet-data.json' 
+const indexRouter = require("./index");
+const dataPath = './Details/pet-data.json' ;
 
 // util functions 
 
@@ -16,17 +16,10 @@ const getTrackerData = () => {
     return JSON.parse(jsonData)    
 }
 
-
-// reading the data
-trackerRoutes.get('/tracker', (req, res) => {
-    fs.readFile(dataPath, 'utf8', (err, data) => {
-      if (err) {
-        throw err;
-      }
-
-      res.send(JSON.parse(data));
-    });
-  });
+// Home page route.
+trackerRoutes.get("/", function (req, res) {
+  res.render("Home Page")
+});
 
 // Create new pet
   trackerRoutes.post('/tracker/add', (req, res) => {
@@ -43,7 +36,7 @@ trackerRoutes.get('/tracker', (req, res) => {
 })
 
 // Read - get all pets from the json file
-trackerRoutes.get('/tracker/list', (req, res) => {
+trackerRoutes.get('/tracker', (req, res) => {
   const pets = getTrackerData()
   res.send(pets)
 })
