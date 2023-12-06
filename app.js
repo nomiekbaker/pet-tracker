@@ -4,12 +4,10 @@ const multer = require('multer');
 const upload = multer();
 const fs = require('fs');
 
-// create our express app
 const app = express()
-// middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-// route
+
 const routes = require('./Routes/Route')
 app.use('/', routes)
 
