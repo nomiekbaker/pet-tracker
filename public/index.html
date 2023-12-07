@@ -40,8 +40,8 @@
     <label class="required" for="name">Name:</label>
     <input type="text" id="name" name="name" required><br><br>
     
-    <label class="required" for="photo">Profile Picture:</label>
-    <input type="url" id="photo" name="photo" placeholder="Picture URL" required><br><br>
+    <label class="required" for="picture">Profile Picture:</label>
+    <input type="url" id="picture" name="picture" placeholder="Picture URL" required><br><br>
     
     <fieldset>
       <legend class = "required" >Species</legend>
@@ -109,7 +109,7 @@
         card.classList.add('card');
 
         const img = document.createElement('img');
-        img.src = pet.photo;
+        img.src = pet.picture;
         img.alt = pet.name;
 
         const cardInfo = document.createElement('div');
@@ -117,7 +117,7 @@
         cardInfo.innerHTML = `
           <strong>Name:</strong> ${pet.name}<br>
           <strong>Species:</strong> ${pet.species}<br>
-          <strong>Friendly:</strong> ${pet.friendly}<br>
+          <strong>Friendly:</strong> ${pet.isFriendly}<br>
         `;
         const deleteBtn = document.createElement('button');
           deleteBtn.textContent = 'Delete';

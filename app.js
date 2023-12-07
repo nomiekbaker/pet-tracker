@@ -2,10 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb+srv://nomiekb:Idunno2023@cluster0.ca9wu98.mongodb.net/')
+mongoose.connect('mongodb+srv://nomiekb:Idunno2023@cluster0.ca9wu98.mongodb.net/test')
 
 const db = mongoose.connection
 db.on('error', (err) => { console.log(err) })
+console.log(db.name)
 db.once('open', () => {
   console.log('Connected to MongoDB')
 })
@@ -36,10 +37,10 @@ app.get('/pets', async (req, res) => {
 })
 
 app.post('/pets', async (req, res) => {
-  const { name, photo, species, friendly } = req.body
+  const myPet = req.body
 
   try {
-    const newPet = new Pet({ name, photo, species, friendly })
+    const newPet = new Pet({ name: myPet.name, picture: myPet.picture, species: myPet.species, isFriendly: myPet.isFriendly })
     await newPet.save()
     res.status(201).json(newPet)
   } catch (error) {
