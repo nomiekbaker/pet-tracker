@@ -1,18 +1,30 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const upload = multer()
 
 mongoose.connect('mongodb+srv://nomiekb:Idunno2023@cluster0.ca9wu98.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
 
-const db = mongoose.connection
+// const db = mongoose.connection
+
+const schemaData = mongoose.Schema({
+  name: String,
+  picture: String,
+  isFriendly: Boolean,
+  species: String
+})
+const pet = mongoose.model('pet', schemaData)
+module.exports = pet
 
 const app = express()
-app.use(morgan('dev')); app.use(bodyParser.urlencoded({ extended: true })); app.use(bodyParser.json())
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => { console.log(`Server is running on port ${PORT}`) })
+
+// comment this part out
+// app.use(morgan('dev')); app.use(bodyParser.urlencoded({ extended: true })); app.use(bodyParser.json())
+// const PORT = process.env.PORT || 3000
+// app.listen(PORT, () => { console.log(`Server is running on port ${PORT}`) })
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -40,5 +52,7 @@ app.post('/', function (req, res) {
   res.send('recieved your request!')
 })
 
-db.on('error', (err) => { console.log(err) })
-db.once('open', () => { console.log('Database Connection Established') })
+// comment this part out
+// db.on('error', (err) => { console.log(err) })
+// db.once('open', () => { console.log('Database Connection Established') })
+// db.collection.find()
