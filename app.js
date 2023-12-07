@@ -1,37 +1,44 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const morgan = require('morgan');
-const multer = require('multer');
-const upload = multer();
-const fs = require('fs');
+const express = require('express')
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const mongoose = require('mongoose')
+const multer = require('multer')
+const upload = multer()
+
+mongoose.connect('mongodb+srv://nomiekb:Idunno2023@cluster0.ca9wu98.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
+
+const db = mongoose.connection
 
 const app = express()
-app.use(morgan('dev'));app.use(bodyParser.urlencoded({extended: true}));app.use(bodyParser.json());
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {  console.log(`Server is running on port ${PORT}`)});
+app.use(morgan('dev')); app.use(bodyParser.urlencoded({ extended: true })); app.use(bodyParser.json())
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => { console.log(`Server is running on port ${PORT}`) })
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const routes = require('./Routes/Route')
 app.use('/', routes)
 
-//start server
-app.listen(3000, ()=>{
-    console.log("listeniing at port:3000")
-}) 
+// start server
+app.listen(3000, () => {
+  console.log('listeniing at port:3000')
+})
 
-app.set('view engine', 'pug');
-app.set('views','./views');
+app.set('view engine', 'pug')
+app.set('views', './views')
 
-app.get('/', function(req, res){
-    res.render('view');
- });
+app.get('/', function (req, res) {
+  res.render('view')
+})
 
- // for parsing multipart/form-data
-app.use(upload.array()); 
-app.use(express.static('public'));
+// for parsing multipart/form-data
+app.use(upload.array())
+app.use(express.static('public'))
 
-app.post('/', function(req, res){
-   console.log(req.body);
-   res.send("recieved your request!");
-});
+app.post('/', function (req, res) {
+  console.log(req.body)
+  res.send('recieved your request!')
+})
+
+db.on('error', (err) => { console.log(err) })
+db.once('open', () => { console.log('Database Connection Established') })
