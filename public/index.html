@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pet Tracker</title>
+  <style>
+    /* Basic styling for the cards */
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px;
+      width: 300px;
+      display: inline-block;
+      vertical-align: top;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .card-info {
+      padding: 10px 0;
+    }
+    .required::after {
+      content: '*';
+      color: red;
+    }
+    
+  </style>
+</head>
+<body>
+  <h1>Pet Tracker</h1>
+
+  <h2>Add a Pet</h2>
+  <form id="addPetForm">
+    <label class="required" for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label class="required" for="photo">Profile Picture:</label>
+    <input type="url" id="photo" name="photo" placeholder="Picture URL" required><br><br>
+    
+    <fieldset>
+      <legend class = "required" >Species</legend>
+    <input type="radio" id="cat" name="species" value="cat" required>
+    <label for="cat">Cat</label><br>
+    
+    <input type="radio" id="dog" name="species" value="dog">
+    <label for="dog">Dog</label><br>
+    
+    <input type="radio" id="bird" name="species" value="bird">
+    <label for="bird">Bird</label><br>
+    </fieldset>
+    <br>
+  <input type="checkbox" id="friendly" name="friendly" value="yes">
+  <label for="friendly">Are they Friendly?</label>
+  <br>
+  <br>
+    <input type="submit" value="Add Pet">
+  </form>
+
+  <h2>Pets</h2>
+  <div id="petList"></div>
+
+  <script>
+    async function fetchPets() {
+      const response = await fetch('/pets');
+      const pets = await response.json();
+
+      const petListContainer = document.getElementById('petList');
+      petListContainer.innerHTML = '';
+
+      pets.forEach(pet => {
+        const card = createPetCard(pet);
+        petListContainer.appendChild(card);
+      });
+    }
+
+    document.getElementById('addPetForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch('/pets', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add pet');
+        }
+
+        const newPet = await response.json();
+        const petListContainer = document.getElementById('petList');
+        const newCard = createPetCard(newPet);
+        petListContainer.appendChild(newCard);
+
+        this.reset();
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+      function createPetCard(pet) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        const img = document.createElement('img');
+        img.src = pet.photo;
+        img.alt = pet.name;
+
+        const cardInfo = document.createElement('div');
+        cardInfo.classList.add('card-info');
+        cardInfo.innerHTML = `
+          <strong>Name:</strong> ${pet.name}<br>
+          <strong>Species:</strong> ${pet.species}<br>
+          <strong>Friendly:</strong> ${pet.friendly}<br>
+        `;
+        const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Delete';
+          deleteBtn.addEventListener('click', () => deletePet(pet._id))
+
+        card.appendChild(img);
+        card.appendChild(cardInfo);
+        card.appendChild(deleteBtn);
+      return card;
+    }
+
+    async function deletePet(petId) {
+      try {
+        const response = await fetch(`/pets/${petId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          fetchPets();
+        } else {
+          console.error('Failed to delete pet');
+        }
+      } catch (error) {
+        console.error('Failed to delete pet:', error);
+      }
+    }
+
+    fetchPets();
+  </script>
+</body>
+</html>
