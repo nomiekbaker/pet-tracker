@@ -48,11 +48,16 @@ app.use(upload.array())
 app.use(express.static('public'))
 
 app.post('/', function (req, res) {
-  console.log(req.body)
-  res.send('recieved your request!')
+  res.render('view')
 })
 
 // comment this part out
 // db.on('error', (err) => { console.log(err) })
 // db.once('open', () => { console.log('Database Connection Established') })
 // db.collection.find()
+
+// const myForm = document.getElementById('myForm')
+// myForm.addEventListener('submit', (e) => {
+//   const name = document.getElementById('name')
+
+// })

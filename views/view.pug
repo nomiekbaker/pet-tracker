@@ -3,7 +3,6 @@ head
   meta(charset='utf-8')
   meta(name='viewport', content='width=device-width')
   title Pet Tracker
-//- label.required:after(style={ content:"*", color: red})
 style.
   .required:after{
   content:"*";
@@ -11,7 +10,7 @@ style.
   color: red;
   }
 h1  Pet Tracker 
-form(action = "/", method = "POST")
+form#myForm(action = "/", method = "POST")
   h2  Add a New Pet
   label.required(for='name') Name:
   br
