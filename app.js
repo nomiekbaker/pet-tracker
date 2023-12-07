@@ -21,9 +21,6 @@ const Pet = mongoose.model('Pet', schemaData)
 
 const app = express()
 
-const PORT = 4000
-app.listen(PORT, () => { console.log(`Server is running on port ${PORT}`) })
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -31,7 +28,7 @@ app.use(express.static('public'))
 
 app.get('/pets', async (req, res) => {
   try {
-    const pets = await Pet.find({})
+    const pets = await Pet.find()
     res.json(pets)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -40,27 +37,11 @@ app.get('/pets', async (req, res) => {
 
 app.post('/pets', async (req, res) => {
   const { name, photo, species, friendly } = req.body
-  const newPet = new Pet({ name, photo, species, friendly })
 
   try {
-    const savedPet = await newPet.save()
-    res.status(201).json(savedPet)
-  } catch (error) {
-    res.status(400).json({ message: error.message })
-  }
-})
-
-app.put('/pets/:id', async (req, res) => {
-  const { id } = req.params
-  const { name, photo, species, friendly } = req.body
-
-  try {
-    const updatedPet = await Pet.findByIdAndUpdate(
-      id,
-      { name, photo, species, friendly },
-      { new: true }
-    )
-    res.json(updatedPet)
+    const newPet = new Pet({ name, photo, species, friendly })
+    await newPet.save()
+    res.status(201).json(newPet)
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
@@ -76,3 +57,6 @@ app.delete('/pets/:id', async (req, res) => {
     res.status(400).json({ message: error.message })
   }
 })
+
+const PORT = 4000
+app.listen(PORT, () => { console.log(`Server is running on port ${PORT}`) })
