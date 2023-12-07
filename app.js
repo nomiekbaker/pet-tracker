@@ -1,10 +1,14 @@
-const express = require("express")
-const bodyParser = require("body-parser")
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require('morgan');
 const multer = require('multer');
 const upload = multer();
 const fs = require('fs');
 
 const app = express()
+app.use(morgan('dev'));app.use(bodyParser.urlencoded({extended: true}));app.use(bodyParser.json());
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {  console.log(`Server is running on port ${PORT}`)});
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
