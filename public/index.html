@@ -35,9 +35,9 @@
 <body>
   <h1>Pet Tracker</h1>
 
-  <h2>Add a Pet</h2>
+  <h2>Add a new Pet!</h2>
   <form id="addPetForm">
-    <label class="required" for="name">Name:</label>
+    <label class="required" for="name">Pet Name:</label>
     <input type="text" id="name" name="name" required><br><br>
     
     <label class="required" for="picture">Profile Picture:</label>
@@ -56,13 +56,13 @@
     </fieldset>
     <br>
   <input type="checkbox" id="friendly" name="friendly" value="yes">
-  <label for="friendly">Are they Friendly?</label>
+  <label for="friendly">Are They Friendly?</label>
   <br>
   <br>
-    <input type="submit" value="Add Pet">
+    <input type="submit" value="Add Pet!">
   </form>
 
-  <h2>Pets</h2>
+  <h2>Pet List</h2>
   <div id="petList"></div>
 
   <script>
@@ -179,7 +179,8 @@
       } else {
         pets = JSON.parse(pets);
       }
-      pets.push(pet);
+      const petWithId = { ...pet, id: generateId() };
+      pets.push(petWithId);
       localStorage.setItem('pets', JSON.stringify(pets));
     }
 
