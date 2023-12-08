@@ -11,3 +11,6 @@ After attempting to use MongoDB, I reverted to using localStorage to get a funct
 - [MongoDB](www.mongodb.com)
 - [W3Schools](https://www.w3schools.com/jsref/prop_win_localstorage.asp)
 - [YouTube](https://www.youtube.com/watch?v=EUHlm0leMM0)
+
+# Screenshot
+![screenshot](screenshot.png)
