@@ -66,45 +66,137 @@
   <div id="petList"></div>
 
   <script>
-    async function fetchPets() {
-      const response = await fetch('/pets');
-      const pets = await response.json();
+    // async function fetchPets() {
+    //   const response = await fetch('/pets');
+    //   const pets = await response.json();
 
+    //   const petListContainer = document.getElementById('petList');
+    //   petListContainer.innerHTML = '';
+
+    //   pets.forEach(pet => {
+    //     const card = createPetCard(pet);
+    //     petListContainer.appendChild(card);
+    //   });
+    // }
+
+    // document.getElementById('addPetForm').addEventListener('submit', async function(event) {
+    //   event.preventDefault();
+    //   const formData = new FormData(this);
+
+    //   try {
+    //     const response = await fetch('/pets', {
+    //       method: 'POST',
+    //       body: formData,
+    //     });
+
+    //     if (!response.ok) {
+    //       throw new Error('Failed to add pet');
+    //     }
+
+    //     const newPet = await response.json();
+    //     const petListContainer = document.getElementById('petList');
+    //     const newCard = createPetCard(newPet);
+    //     petListContainer.appendChild(newCard);
+
+    //     this.reset();
+    //   } catch (error) {
+    //     alert(error.message);
+    //   }
+    // });
+
+    //   function createPetCard(pet) {
+    //     const card = document.createElement('div');
+    //     card.classList.add('card');
+
+    //     const img = document.createElement('img');
+    //     img.src = pet.picture;
+    //     img.alt = pet.name;
+
+    //     const cardInfo = document.createElement('div');
+    //     cardInfo.classList.add('card-info');
+    //     cardInfo.innerHTML = `
+    //       <strong>Name:</strong> ${pet.name}<br>
+    //       <strong>Species:</strong> ${pet.species}<br>
+    //       <strong>Friendly:</strong> ${pet.isFriendly}<br>
+    //     `;
+    //     const deleteBtn = document.createElement('button');
+    //       deleteBtn.textContent = 'Delete';
+    //       deleteBtn.addEventListener('click', () => deletePet(pet._id))
+
+    //     card.appendChild(img);
+    //     card.appendChild(cardInfo);
+    //     card.appendChild(deleteBtn);
+    //   return card;
+    // }
+
+    // async function deletePet(petId) {
+    //   try {
+    //     const response = await fetch(`/pets/${petId}`, {
+    //       method: 'DELETE',
+    //     });
+
+    //     if (response.ok) {
+    //       fetchPets();
+    //     } else {
+    //       console.error('Failed to delete pet');
+    //     }
+    //   } catch (error) {
+    //     console.error('Failed to delete pet:', error);
+    //   }
+    // }
+
+    // fetchPets();
+
+    function generateId() {
+      return '_' + Math.random().toString(36).substr(2, 9); // Basic random ID generator
+    }
+
+    document.getElementById('addPetForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const picture = document.getElementById('picture').value;
+      const selectedSpecies = document.querySelector('input[name="species"]:checked');
+      const species = selectedSpecies ? selectedSpecies.value : null;
+      const friendly = document.getElementById('friendly').checked ? 'Yes' : 'No';
+
+      const pet = {
+        name,
+        picture,
+        species,
+        friendly
+      };
+
+      savePet(pet);
+      displayPets();
+      this.reset();
+    });
+
+    function savePet(pet) {
+      let pets = localStorage.getItem('pets');
+      if (!pets) {
+        pets = [];
+      } else {
+        pets = JSON.parse(pets);
+      }
+      pets.push(pet);
+      localStorage.setItem('pets', JSON.stringify(pets));
+    }
+
+    function displayPets() {
       const petListContainer = document.getElementById('petList');
       petListContainer.innerHTML = '';
 
-      pets.forEach(pet => {
-        const card = createPetCard(pet);
-        petListContainer.appendChild(card);
-      });
-    }
-
-    document.getElementById('addPetForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-
-      try {
-        const response = await fetch('/pets', {
-          method: 'POST',
-          body: formData,
+      let pets = localStorage.getItem('pets');
+      if (pets) {
+        pets = JSON.parse(pets);
+        pets.forEach(pet => {
+          const card = createPetCard(pet);
+          petListContainer.appendChild(card);
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to add pet');
-        }
-
-        const newPet = await response.json();
-        const petListContainer = document.getElementById('petList');
-        const newCard = createPetCard(newPet);
-        petListContainer.appendChild(newCard);
-
-        this.reset();
-      } catch (error) {
-        alert(error.message);
       }
-    });
-
-      function createPetCard(pet) {
+    }
+       function createPetCard(pet) {
         const card = document.createElement('div');
         card.classList.add('card');
 
@@ -117,35 +209,28 @@
         cardInfo.innerHTML = `
           <strong>Name:</strong> ${pet.name}<br>
           <strong>Species:</strong> ${pet.species}<br>
-          <strong>Friendly:</strong> ${pet.isFriendly}<br>
+          <strong>Friendly:</strong> ${pet.friendly}<br>
         `;
         const deleteBtn = document.createElement('button');
           deleteBtn.textContent = 'Delete';
-          deleteBtn.addEventListener('click', () => deletePet(pet._id))
+          deleteBtn.addEventListener('click', () => deletePet(pet.id))
 
         card.appendChild(img);
         card.appendChild(cardInfo);
         card.appendChild(deleteBtn);
       return card;
     }
-
-    async function deletePet(petId) {
-      try {
-        const response = await fetch(`/pets/${petId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          fetchPets();
-        } else {
-          console.error('Failed to delete pet');
-        }
-      } catch (error) {
-        console.error('Failed to delete pet:', error);
+    function deletePet(petId) {
+      let pets = JSON.parse(localStorage.getItem('pets'));
+      if (!pets) {
+        return;
       }
-    }
 
-    fetchPets();
+      const updatedPets = pets.filter(pet => pet.id !== petId);
+      localStorage.setItem('pets', JSON.stringify(updatedPets));
+      displayPets();
+    }
+    displayPets();
   </script>
 </body>
 </html>
